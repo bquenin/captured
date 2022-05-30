@@ -46,7 +46,7 @@ func (d darwin) ListWindows() ([]*WindowInfo, error) {
 			case "kCGWindowName":
 				entry.Title = v.(string)
 			case "kCGWindowNumber":
-				entry.ID = int(v.(int64))
+				entry.id = uintptr(v.(int64))
 			}
 		}
 		result = append(result, entry)
@@ -72,7 +72,7 @@ func (d darwin) CaptureWindow(window *WindowInfo, options Options) (*image.RGBA,
 	}
 	defer C.CGColorSpaceRelease(colorSpace)
 
-	capture := C.CGWindowListCreateImage(C.CGRectNull, C.kCGWindowListOptionIncludingWindow, C.uint32_t(window.ID), C.kCGWindowImageBoundsIgnoreFraming)
+	capture := C.CGWindowListCreateImage(C.CGRectNull, C.kCGWindowListOptionIncludingWindow, C.uint32_t(window.id), C.kCGWindowImageBoundsIgnoreFraming)
 	if capture == C.CGImageRef(0) {
 		return nil, errors.New("cannot capture window")
 	}

@@ -12,7 +12,7 @@ const (
 )
 
 type WindowInfo struct {
-	ID     int
+	id     uintptr
 	Title  string
 	Width  int
 	Height int
