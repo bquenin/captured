@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"image"
 	"strings"
+	"unicode"
 )
 
 const (
@@ -32,7 +33,13 @@ type base struct {
 func (b *base) CaptureWindowByTitle(contains string, options Options) (*image.RGBA, error) {
 	windowList, _ := Captured.ListWindows()
 	for _, window := range windowList {
-		if !strings.Contains(strings.ToLower(window.Title), strings.ToLower(contains)) {
+		windowTitle := strings.Map(func(r rune) rune {
+			if unicode.IsPrint(r) {
+				return r
+			}
+			return -1
+		}, window.Title)
+		if !strings.Contains(strings.ToLower(windowTitle), strings.ToLower(contains)) {
 			continue
 		}
 		img, err := Captured.CaptureWindow(window, options)
