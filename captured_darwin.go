@@ -24,6 +24,7 @@ type darwin struct {
 }
 
 func newCaptured() Interface {
+	C.CGRequestScreenCaptureAccess()
 	return &darwin{}
 }
 
